@@ -37,7 +37,7 @@ Thanks for [LEDE](https://github.com/coolsnowwolf/lede), [homebridge project](ht
   1. If you used for x86_64 platform, download the ipk and install with:
   >opkg install xxx.ipk
   
-    If you used other platform, you may need to download the package and try to compile by yourself.
+    If you used other platform, you have a try first, if failed, please let me know, or you may need to download the package and try to compile by yourself.
   2. click `Install` Button to check the environment, like node, node-gyp and npm.
   3. If all success, you can continue to configuration step.
   
