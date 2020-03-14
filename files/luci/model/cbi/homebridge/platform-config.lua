@@ -23,6 +23,11 @@ local mi_plug_devices = {
 	"MiQingPinboardWithUSB"
 }
 
+local vacuum_devices = {
+	"MiRobotVacuum",
+	"MiRobotVacuum2"
+}
+
 m = Map("homebridge", translate("Edit Server"))
 m.redirect = luci.dispatcher.build_url("admin/services/homebridge/platforms")
 m.sid = sid
@@ -63,6 +68,7 @@ o = s:option(ListValue, "platform_type", translate("Platform Type"))
 o:value("ReYeelightPlatform", translate("Yeelight"))
 o:value("MiPhilipsLightPlatform", translate("Mi Philips Light"))
 o:value("MiOutletPlatform", translate("Mi Plug"))
+o:value("MiRobotVacuumPlatform", translate("Mi Vacuum"))
 o.rmempty = false
 
 o = s:option(ListValue, "platform_yeelight", translate("Yeelight"))
@@ -77,6 +83,10 @@ o = s:option(ListValue, "platform_mi_plug", translate("Mi Plug"))
 for _, v in ipairs(mi_plug_devices) do o:value(v) end
 o:depends("platform_type", "MiOutletPlatform")
 
+o = s:option(ListValue, "platform_vacuum", translate("Vacuum"))
+for _, v in ipairs(vacuum_devices) do o:value(v) end
+o:depends("platform_type", "MiRobotVacuumPlatform")
+
 o = s:option(Value, "alias", translate("Alias"))
 o.rmempty = false
 
@@ -89,6 +99,7 @@ o = s:option(Value, "token","Token")
 o.datatype = "string"
 o.rmempty = false
 
+-- [ yeelight config ] --
 o = s:option(Flag, "updatetimer", translate("Auto Update Device"))
 o.default = '1'
 o:depends("platform_type", "ReYeelightPlatform")
@@ -99,6 +110,7 @@ o = s:option(Value, "interval", translate("Interval"))
 o.datatype = "uinteger"
 o:depends("updatetimer", "1")
 o.default = "5"
+-- [ yeelight config ] --
 
 -- [Philips Light Config] --
 o = s:option(Value, "main_light_name", translate("Main Light Name"))
@@ -126,6 +138,7 @@ o:depends("platform_philips_light", "MiPhilipsTableLamp2")
 o.default = "eyecare model"
 -- [Philips Light Config] --
 
+-- [ Outlet Config ] --
 o = s:option(Flag, "outlet_disable", translate("Disable Plug"))
 o.default = "0"
 o.rmempty = false
@@ -162,8 +175,7 @@ o = s:option(Value, "switch_USB_name", translate("USB Name"))
 o.datatype = "string"
 o:depends("platform_mi_plug", "MiPlugBaseWithUSB")
 o.default = "USB"
-
-
+-- [ Outlet Config ] --
 
 
 return m

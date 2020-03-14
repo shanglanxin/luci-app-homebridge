@@ -1,6 +1,6 @@
 #!/bin/sh
 
-CONFIG_BASE="/etc/homebridge/"
+CONFIG_BASE="/usr/share/homebridge/devices/"
 
 if [ -z $1 ]
 then

@@ -1,7 +1,7 @@
 local ucursor = require "luci.model.uci".cursor()
 local json = require "luci.jsonc"
 
-local path = "/etc/homebridge/"
+local path = "/usr/share/homebridge/devices/"
 
 local configs = ucursor:get_all("homebridge")
 

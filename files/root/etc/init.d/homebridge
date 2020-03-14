@@ -14,7 +14,7 @@ EOF
 BIN="/usr/bin/homebridge"
 USER="homebridge"
 LOG_FILE="/var/log/homebridge.log"
-CONFIG_BASE="/etc/homebridge/"
+CONFIG_BASE="/usr/share/homebridge/devices/"
 NODE_PATH="/usr/lib/node_modules/"
 enabled=0
 model=nil
@@ -82,6 +82,9 @@ check_plugin(){
 	if [ $plugin_name = "ReYeelightPlatform" ]; then
 		platform_name="homebridge-re-yeelight"
 	fi
+	if [ $plugin_name = "MiRobotVacuumPlatform" ];then
+		platform_name="homebridge-mi-robot_vacuum"
+	fi
 	
 	if [ -d ${NODE_PATH}$platform_name ];then
 		echo "$platform_name already installed" >> $LOG_FILE
@@ -91,13 +94,13 @@ check_plugin(){
 }
 
 start(){
-	echo "start function" >> $LOG_FILE
+	echo "start function" > $LOG_FILE
 	if [ -d $CONFIG_BASE ];then
-		if [ ! node -v ]; then
+		if ! [[ `node -v` ]];then
 			echo "Please Install Environment First" >> $LOG_FILE
 			exit 1
 		fi
-		if [ ! node-gyp --version ];then
+		if [ ! `node-gyp --version` ];then
 			echo "Please Install node-gyp Environment First">> $LOG_FILE
 		fi
 		config_load homebridge
@@ -110,7 +113,7 @@ start(){
 			# remove invalid folders
 			lua /usr/share/homebridge/remove_folder.lua >> $LOG_FILE
 			if [ "$model" = "independent" ];then
-				echo "Run As Independet Model" >> $LOG_FILE
+				echo "Run As Independent Model" >> $LOG_FILE
 				config_foreach start_sub_service platform 
 			fi
 			if [ "$model" = "main" ];then
@@ -146,9 +149,10 @@ gen_node_config() {
 	config_load homebridge
 	local is_independent
 	config_get_bool is_independent $1 is_independent
-	if [ ! $is_independent ];then
+	echo $is_independent >> $LOG_FILE
+	if [ $is_independent = 0 ];then
 		echo "Run $1 as Main" >> $LOG_FILE
-		lua /usr/share/homebridge/main_config.lua $1 >>$CONFIG_BASE/main/config.json
+		lua /usr/share/homebridge/gen_config.lua $1 main >>$CONFIG_BASE/main/config.json
 	fi
 }
 
@@ -157,11 +161,11 @@ start_sub_service() {
 	config_load homebridge
 	local is_independent
 	config_get_bool is_independent $1 is_independent
-	if [ $is_independent ];then
+	if [ $is_independent = 1 ];then
 		echo "Run $1 as independent" >> $LOG_FILE
 		mkdir -p $CONFIG_BASE/$1
 		pid=$CONFIG_BASE/$1/homebridge.pid
-		lua /usr/share/homebridge/independent_config.lua $1  >$CONFIG_BASE/$1/config.json
+		lua /usr/share/homebridge/gen_config.lua $1 independent >$CONFIG_BASE/$1/config.json
 
 		config_path="${CONFIG_BASE}$1/"
 		nohup ${BIN} -U "${config_path}" >> $LOG_FILE 2>&1 </dev/null & 
