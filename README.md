@@ -30,7 +30,6 @@ Thanks for [LEDE](https://github.com/coolsnowwolf/lede), [homebridge project](ht
   DeskLamp(Yeelight台灯)<br>
   ColorLedStrip(Yeelight彩光灯带)<br>
   CeilingLamp(Yeelight吸顶灯)<br>
-  <br>
 4. Mi Vaccum<br>
   MiRobotVacuum(小米扫地机器人)<br>
   MiRobotVacuum2(石头扫地机器人)<br>
