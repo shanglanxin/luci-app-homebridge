@@ -3,13 +3,11 @@
 START=98
 STOP=15
 #USE_PROCD=1
-EXTRA_COMMANDS="restart_on start_sub_service stop_sub_service status"
-EXTRA_HELP=<<EOF
-			status Print Homebridge run information
-			restart_on 'section_name':restart of input section name
-			start_sub_service 'section_name':start of input section name
-			stop_sub_service 'section_name':stop of input section name
-EOF
+
+extra_command "restart_on" "'section_name':restart of input section name"
+extra_command "start_sub_service" "''section_name':start of input section name"
+extra_command "stop_sub_service" "'section_name':stop of input section name"
+extra_command "status" "Print Homebridge run information"
 
 BIN="/usr/bin/homebridge"
 USER="homebridge"
